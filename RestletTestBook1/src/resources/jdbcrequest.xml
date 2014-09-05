@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<request>
+    <header>
+        <connection>
+            <usePooling>true</usePooling>
+            <property name="user">root</property >
+            <property name="password"></property >
+        </connection>
+        <start>10</start>
+        <limit>20</limit>
+        <returnGeneratedKeys>true</returnGeneratedKeys>
+    </header>
+    <body>
+        <statement>SELECT * FROM usuarios WHERE userName=alberto</statement>
+    </body>
+</request>
