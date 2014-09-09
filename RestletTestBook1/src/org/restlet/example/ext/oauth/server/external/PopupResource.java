@@ -62,9 +62,15 @@ public class PopupResource extends ServerResource {
     Series<CookieSetting> cs = getResponse().getCookieSettings();
     try {
       JSONObject json = new JSONObject(content);
-      cs.add(0, new CookieSetting("token_type", json.getString("token_type")));
-      cs.add(1, new CookieSetting("access_token", json.getString("access_token")));
-      cs.add(2, new CookieSetting("refresh_token", json.getString("refresh_token")));
+      CookieSetting cookieSetting =  new CookieSetting("token_type", json.getString("token_type"));
+      cookieSetting.setPath("/");
+      cs.add(0, cookieSetting);
+      cookieSetting =  new CookieSetting("access_token", json.getString("access_token"));
+      cookieSetting.setPath("/");
+      cs.add(1, cookieSetting);
+       cookieSetting =  new CookieSetting("refresh_token", json.getString("refresh_token"));
+      cookieSetting.setPath("/");
+      cs.add(2, cookieSetting);
       setStatus(Status.SUCCESS_OK);
     }
     catch (JSONException e) {

@@ -36,7 +36,7 @@ import org.restlet.Component;
 import org.restlet.data.Protocol;
 import org.restlet.example.ext.oauth.server.external.ExternalApplication;
 import org.restlet.example.ext.oauth.server.oauth.OAuth2ServerApplication;
-import org.restlet.example.ext.oauth.server.oauth.SampleUserManager;
+import org.restlet.example.ext.oauth.server.oauth.UsuarioManager;
 import org.restlet.ext.oauth.internal.Client;
 import org.restlet.ext.oauth.internal.Client.ClientType;
 import org.restlet.ext.oauth.internal.ClientManager;
@@ -50,11 +50,11 @@ import org.restlet.ext.oauth.internal.memory.MemoryTokenManager;
  */
 public class OAuth2Sample {
 
-  private static SampleUserManager userManager;
+  private static UsuarioManager userManager;
   private static MemoryClientManager clientManager;
   private static TokenManager tokenManager;
 
-  public static SampleUserManager getSampleUserManager() {
+  public static UsuarioManager getSampleUserManager() {
     return userManager;
   }
 
@@ -67,10 +67,10 @@ public class OAuth2Sample {
   }
 
   public static void main(String[] args) throws Exception {
-    userManager = new SampleUserManager();
+    userManager = new UsuarioManager();
 
-    userManager.addUser("Alberto").setPassword("123456".toCharArray());
-    userManager.addUser("bob").setPassword("123456".toCharArray());
+  //  userManager.addUser("Alberto").setPassword("123456".toCharArray());
+   // userManager.addUser("bob").setPassword("123456".toCharArray());
 
     clientManager = new MemoryClientManager();
     Client client =clientManager.createClient("b8d1cfda-0a13-4072-ab8f-ae3494b2e028", "4RI419iBLqXTEiItKgZUcwm3F/Q=".toCharArray(), ClientType.PUBLIC, new String[] { "http://localhost:5050/sample/popup" }, null);

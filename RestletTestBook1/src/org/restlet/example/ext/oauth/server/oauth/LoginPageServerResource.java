@@ -33,7 +33,9 @@
 package org.restlet.example.ext.oauth.server.oauth;
 
 import freemarker.template.Configuration;
+import java.sql.SQLException;
 import java.util.HashMap;
+import org.reslet.example.oauth.dbconnection.dto.UsuarioDTO;
 import org.restlet.data.MediaType;
 import org.restlet.example.ext.oauth.server.OAuth2Sample;
 import org.restlet.ext.freemarker.ContextTemplateLoader;
@@ -56,7 +58,7 @@ public class LoginPageServerResource extends AuthorizationBaseServerResource {
     
     @Get("html")
     @Post("html")
-    public Representation getPage() throws OAuthException {
+    public Representation getPage() throws OAuthException, SQLException {
        System.out.println("Get Login");
         String userId = getQueryValue("user_id");
         System.out.println("Get Login 2"+userId);
@@ -68,14 +70,15 @@ public class LoginPageServerResource extends AuthorizationBaseServerResource {
             //TODO Chekear en la base de datos de Users (UssuarioConnection) si es correcto la tupla userid/password
             // Podemos utilizar UsuarioConnection dentro de SampleUser y que se gestione internamente desde esta clase, p.e
             
-            SampleUser sampleUser = OAuth2Sample.getSampleUserManager().findUserById(userId);
-            
-            
-            if (sampleUser == null) {
+            UsuarioDTO user = OAuth2Sample.getSampleUserManager().findUserById(userId);
+
+            if (user == null) {
                 data.put("error", "Authentication failed.");
                 data.put("error_description", "ID is invalid.");
             } else {
-                boolean result = SecretVerifier.compare(password.toCharArray(), sampleUser.getPassword());
+                System.out.println("Obj created");
+                System.out.println("password en Login page:"+ user.getPassword());
+                boolean result = SecretVerifier.compare(password.toCharArray(), user.getPassword().toCharArray());
                 if (result) {
                     AuthSession session = getAuthSession();
                     session.setScopeOwner(userId);

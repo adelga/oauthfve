@@ -3,13 +3,15 @@ package org.restlet.example.ext.oauth.server.external;
 import java.io.IOException;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.reslet.example.oauth.dbconnection.UsuariosConnection;
+import org.reslet.example.oauth.dbconnection.dao.GenericDAO;
+import org.reslet.example.oauth.dbconnection.dao.UsuarioDAO;
 import org.restlet.data.Form;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ClientResource;
+import org.restlet.resource.Get;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
@@ -20,8 +22,8 @@ import org.restlet.resource.ServerResource;
  */
 public class RestrictedResource extends ServerResource {
 
-  @Override
-  protected Representation get() throws ResourceException {
+  @Get
+  public String getRep() throws ResourceException {
       
       ClientResource cr = new ClientResource("http://localhost:5052/oauth/token_auth");
       System.out.println("Get Restricted");
@@ -46,7 +48,7 @@ public class RestrictedResource extends ServerResource {
       try {
           JSONObject json = new JSONObject(rep.getText());
           System.out.println("json" + json);
-          String username = json.getString("username");
+          String username = "mycallback("+json.getString("username")+")";
           String rsName=getQueryValue("nameRS");
           String  rsUser;
           if(rsName!=null){
@@ -60,7 +62,7 @@ public class RestrictedResource extends ServerResource {
           
           
           
-          return new StringRepresentation("Authenticated: " + rsUser);
+          return "Authenticated: " + rsUser;
       }
       catch (IOException e) {
           // TODO Auto-generated catch block
@@ -69,20 +71,20 @@ public class RestrictedResource extends ServerResource {
        catch (JSONException e) {
           // TODO Auto-generated catch block
           e.printStackTrace();
-          return new StringRepresentation("Not Login");
+          return "Not Login";
       }
       catch (Exception e) {
           // TODO Auto-generated catch block
           e.printStackTrace();
       }
       
-      return new EmptyRepresentation();
+      return "";
   }
 
   private String checkUserRS(String username, String RSName) {
       try{
           
-          return UsuariosConnection.getRsName(UsuariosConnection.getConnection(),username,RSName);
+          return UsuarioDAO.getRsName(GenericDAO.getConnection(),username,RSName);
       }catch(Exception e){
           e.printStackTrace();
           return "ERROR";
