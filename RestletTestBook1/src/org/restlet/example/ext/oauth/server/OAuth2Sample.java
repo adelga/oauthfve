@@ -36,7 +36,7 @@ import org.restlet.Component;
 import org.restlet.data.Protocol;
 import org.restlet.example.ext.oauth.server.external.ExternalApplication;
 import org.restlet.example.ext.oauth.server.oauth.OAuth2ServerApplication;
-import org.restlet.example.ext.oauth.server.oauth.UsuarioManager;
+import org.reslet.example.oauth.dbconnection.model.UsuarioManager;
 import org.restlet.ext.oauth.internal.Client;
 import org.restlet.ext.oauth.internal.Client.ClientType;
 import org.restlet.ext.oauth.internal.ClientManager;

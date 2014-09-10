@@ -23,13 +23,20 @@ public class GenericDAO {
 
     private static String rstable= "resourcetable";
 
-     public static Connection getConnection() throws SQLException {
+     public static Connection getConnection() {
          System.out.println("Connecting to database...");
+
         Connection conn = null;
         Properties connectionProps = new Properties();
         connectionProps.put("user", "root");
         connectionProps.put("password","fve");
-
+           try {
+                Class.forName("com.mysql.jdbc.Driver");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        if(conn == null){
+            try{
         if (dbms.equals("mysql")) {
             conn = DriverManager.getConnection(
                     "jdbc:" + dbms + "://" +
@@ -43,7 +50,13 @@ public class GenericDAO {
                             ";create=true",
                     connectionProps);
         }
-        System.out.println("Connected to database");
+        if(conn != null){
+         System.out.println("Connected to database");
+        }
+            }catch(SQLException ex){
+                System.out.println("Hubo un problema al intentar conectarse con la base de datos");
+            } 
+        }
         return conn;
     }
 }

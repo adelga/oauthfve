@@ -48,7 +48,8 @@ public class RestrictedResource extends ServerResource {
       try {
           JSONObject json = new JSONObject(rep.getText());
           System.out.println("json" + json);
-          String username = "mycallback("+json.getString("username")+")";
+         // String username = "mycallback("+json.getString("username")+")";
+           String username = json.getString("username");
           String rsName=getQueryValue("nameRS");
           String  rsUser;
           if(rsName!=null){
@@ -62,7 +63,9 @@ public class RestrictedResource extends ServerResource {
           
           
           
-          return "Authenticated: " + rsUser;
+          return "mycallback({\"username\": \"" + rsUser + "\"});";
+          
+          
       }
       catch (IOException e) {
           // TODO Auto-generated catch block

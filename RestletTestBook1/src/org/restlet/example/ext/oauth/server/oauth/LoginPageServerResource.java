@@ -69,9 +69,9 @@ public class LoginPageServerResource extends AuthorizationBaseServerResource {
             
             //TODO Chekear en la base de datos de Users (UssuarioConnection) si es correcto la tupla userid/password
             // Podemos utilizar UsuarioConnection dentro de SampleUser y que se gestione internamente desde esta clase, p.e
-            
+            System.out.println("Llamada a findByUserById");
             UsuarioDTO user = OAuth2Sample.getSampleUserManager().findUserById(userId);
-
+            System.out.println("Fin llamada findByUserId");
             if (user == null) {
                 data.put("error", "Authentication failed.");
                 data.put("error_description", "ID is invalid.");
