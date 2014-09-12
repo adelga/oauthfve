@@ -198,7 +198,7 @@ public class AuthorizationServerResource extends
             Client client) {
         Reference ref = new Reference("riap://application"
                 + HttpOAuthHelper.getAuthPage(getContext()));
-        getLogger().fine("Name = " + getApplication().getInboundRoot());
+                System.out.println("Name = " + getApplication().getInboundRoot());
         ref.addQueryParameter("client", session.getClientId());
 
         // Requested scope should not be null.
@@ -217,7 +217,7 @@ public class AuthorizationServerResource extends
         }
 
         // Redirect to AuthPage.
-        getLogger().fine("Redir = " + ref);
+             System.out.println("Redir = " + ref);
         Redirector dispatcher = new Redirector(getContext(), ref.toString(),
                 Redirector.MODE_SERVER_OUTBOUND);
         // XXX: Remove? getRequest().getAttributes().put(ClientCookieID,
@@ -235,10 +235,13 @@ public class AuthorizationServerResource extends
      */
     protected ResponseType[] getResponseType(Form params) throws OAuthException {
         String responseType = params.getFirstValue(RESPONSE_TYPE);
+        System.out.println("1");
         if (responseType == null || responseType.isEmpty()) {
             throw new OAuthException(OAuthError.invalid_request,
                     "No response_type parameter found.", null);
         }
+                System.out.println("2");
+
         /*
          * Extension response types MAY contain a space-delimited (%x20) list of
          * values (3.1.1. Response Type)
@@ -247,6 +250,7 @@ public class AuthorizationServerResource extends
                                                                 // format as
                                                                 // scope.
         ResponseType[] types = new ResponseType[typesString.length];
+        System.out.println("3");
 
         for (int i = 0; i < typesString.length; i++) {
             try {
@@ -259,6 +263,7 @@ public class AuthorizationServerResource extends
                         "Unsupported flow", null);
             }
         }
+        System.out.println("3");
 
         return types;
     }
@@ -276,6 +281,7 @@ public class AuthorizationServerResource extends
             throws OAuthException {
         String redirectURI = params.getFirstValue(REDIR_URI);
         String[] redirectURIs = client.getRedirectURIs();
+        System.out.println("4");
 
         /*
          * If multiple redirection URIs have been registered, if only part of
@@ -296,6 +302,7 @@ public class AuthorizationServerResource extends
                 return new RedirectionURI(redirectURIs[0]);
             }
         }
+        System.out.println("5");
 
         /*
          * When a redirection URI is included in an authorization request, the
@@ -309,9 +316,10 @@ public class AuthorizationServerResource extends
                 return new RedirectionURI(redirectURI, true);
             }
         }
+        System.out.println("6");
 
         // The provided uri is no based on the uri with the client registration.
         throw new OAuthException(OAuthError.invalid_request,
-                "Callback URI does not match.", null);
+                "Callback URI does not match.??", null);
     }
 }

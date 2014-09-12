@@ -50,11 +50,10 @@ public class ExternalApplication extends Application {
     public synchronized Restlet createInboundRoot() {
         Router router = new Router(getContext());
         router.attach("/", IndexResource.class);
-        router.attach("/test",HelloServerResource.class);
         
         router.attach("/popup", PopupResource.class);
         
-        router.attach("/restricted-resource", RestrictedResource.class);
+       
                 
         final Directory css = new Directory(getContext(), "clap://system/resources/resources/");
         router.attach("/resources", css);

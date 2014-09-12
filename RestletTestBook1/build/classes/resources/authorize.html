@@ -16,8 +16,8 @@
             <div class="row" style="margin-top:50px;">
                 <div class="span8 offset2">
                     <form action="${target}" method="get" class="form-horizontal">
-                        <legend>Authorize</legend>
-                        <h4>The following private info is requested</h4>
+                        <legend>Do you want authorize ${client}?</legend>
+                        <h4>The following private info is requested </h4>
                         <#list requestingScopes as r> <input type="checkbox" name="scope" value="${r}" checked />
                         <b>${r}</b><br/>
                         </#list> 

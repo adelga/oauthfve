@@ -1,53 +1,56 @@
-/**
- * Copyright 2005-2014 Restlet
- *
- * The contents of this file are subject to the terms of one of the following
- * open source licenses: Apache 2.0 or LGPL 3.0 or LGPL 2.1 or CDDL 1.0 or EPL
- * 1.0 (the "Licenses"). You can select the license that you prefer but you may
- * not use this file except in compliance with one of these Licenses.
- *
- * You can obtain a copy of the Apache 2.0 license at
- * http://www.opensource.org/licenses/apache-2.0
- *
- * You can obtain a copy of the LGPL 3.0 license at
- * http://www.opensource.org/licenses/lgpl-3.0
- *
- * You can obtain a copy of the LGPL 2.1 license at
- * http://www.opensource.org/licenses/lgpl-2.1
- *
- * You can obtain a copy of the CDDL 1.0 license at
- * http://www.opensource.org/licenses/cddl1
- *
- * You can obtain a copy of the EPL 1.0 license at
- * http://www.opensource.org/licenses/eclipse-1.0
- *
- * See the Licenses for the specific language governing permissions and
- * limitations under the Licenses.
- *
- * Alternatively, you can obtain a royalty free commercial license with less
- * limitations, transferable or non-transferable, directly at
- * http://restlet.com/products/restlet-framework
- *
- * Restlet is a registered trademark of Restlet S.A.S.
- */
+ /**
+  * Copyright 2005-2014 Restlet
+  *
+  * The contents of this file are subject to the terms of one of the following
+  * open source licenses: Apache 2.0 or LGPL 3.0 or LGPL 2.1 or CDDL 1.0 or EPL
+  * 1.0 (the "Licenses"). You can select the license that you prefer but you may
+  * not use this file except in compliance with one of these Licenses.
+  *
+  * You can obtain a copy of the Apache 2.0 license at
+  * http://www.opensource.org/licenses/apache-2.0
+  *
+  * You can obtain a copy of the LGPL 3.0 license at
+  * http://www.opensource.org/licenses/lgpl-3.0
+  *
+  * You can obtain a copy of the LGPL 2.1 license at
+  * http://www.opensource.org/licenses/lgpl-2.1
+  *
+  * You can obtain a copy of the CDDL 1.0 license at
+  * http://www.opensource.org/licenses/cddl1
+  *
+  * You can obtain a copy of the EPL 1.0 license at
+  * http://www.opensource.org/licenses/eclipse-1.0
+  *
+  * See the Licenses for the specific language governing permissions and
+  * limitations under the Licenses.
+  *
+  * Alternatively, you can obtain a royalty free commercial license with less
+  * limitations, transferable or non-transferable, directly at
+  * http://restlet.com/products/restlet-framework
+  *
+  * Restlet is a registered trademark of Restlet S.A.S.
+  */
 package org.restlet.ext.oauth;
 
-import org.restlet.ext.oauth.internal.Client;
+import freemarker.template.Configuration;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import org.reslet.example.oauth.dbconnection.dao.ClientDAO;
+import org.reslet.example.oauth.dbconnection.dao.GenericDAO;
+import org.reslet.example.oauth.dbconnection.dao.UsuarioDAO;
+import org.restlet.data.CacheDirective;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.ext.freemarker.ContextTemplateLoader;
 import org.restlet.ext.freemarker.TemplateRepresentation;
 import org.restlet.ext.oauth.internal.AuthSession;
+import org.restlet.ext.oauth.internal.Client;
 import org.restlet.ext.oauth.internal.Scopes;
+import org.restlet.ext.oauth.internal.Token;
 import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
-import freemarker.template.Configuration;
-import org.restlet.data.CacheDirective;
-import org.restlet.ext.oauth.internal.Token;
 
 /**
  * Helper class to the AuhorizationResource Handles Authorization requests. By
@@ -149,10 +152,10 @@ import org.restlet.ext.oauth.internal.Token;
  * @author Shotaro Uchida <fantom@xmaker.mx>
  */
 public class AuthPageServerResource extends AuthorizationBaseServerResource {
-
+    
     private static final String ACTION_ACCEPT = "Accept";
     private static final String ACTION_REJECT = "Reject";
-
+    
     /**
      * Entry point to the AuthPageResource. The AuthorizationResource dispatches
      * the call to this method. Should also be invoked by an eventual HTML page
@@ -168,24 +171,39 @@ public class AuthPageServerResource extends AuthorizationBaseServerResource {
 // Came back after user interacted with the page
         if (action != null) {
             String[] scopes = getQuery().getValuesArray("scope");
+            if(action.equalsIgnoreCase(ACTION_ACCEPT)){
+                AuthSession session = getAuthSession();
+                String scopeOwner = session.getScopeOwner();
+                
+                System.out.println("client "+ session.getClientId() + "user " + scopeOwner);
+                registerClientUser(session.getClientId(), scopeOwner);
+            }
             handleAction(action, scopes);
             return new EmptyRepresentation();
         }
-// Check if an auth page is set in the Context
+        AuthSession session = getAuthSession();
+        
+        Client client = clients.findById(session.getClientId());
+        String scopeOwner = session.getScopeOwner();
+        
+        System.out.println("client "+ session.getClientId() + "user " + scopeOwner);
+        
         String authPage = HttpOAuthHelper.getAuthPageTemplate(getContext());
-        getLogger().fine("this is auth page: " + authPage);
+        System.out.println("this is auth page: " + authPage);
         if (authPage != null && authPage.length() > 0) {
-            getLogger().fine("loading authPage: " + authPage);
+            System.out.println("loading authPage: " + authPage);
 // Check if we should skip the page if already approved scopes
-            boolean sameScope = HttpOAuthHelper.getAuthSkipApproved(getContext());
-            if (sameScope) {
-                String[] scopesArray = getQuery().getValuesArray("scope");
-                List<String> scopes = Arrays.asList(scopesArray);
-                List<String> previousScopes = Arrays.asList(getQuery().getValuesArray("grantedScope"));
-                if (previousScopes.containsAll(scopes)) {
+//            boolean sameScope = HttpOAuthHelper.getAuthSkipApproved(getContext());
+//            if (sameScope) {
+            String[] scopesArray = getQuery().getValuesArray("scope");
+//                List<String> scopes = Arrays.asList(scopesArray);
+//                List<String> previousScopes = Arrays.asList(getQuery().getValuesArray("grantedScope"));
+            
+            if(client!=null && scopeOwner!=null){
+                if (ClientDAO.checkClientUserAuthorization(GenericDAO.getConnection(),session.getClientId() , scopeOwner)) {
 // we already have approved the current scopes being
 // requested...
-                    getLogger().fine(
+                    System.out.println(
                             "All scopes already approved. - skip auth page.");
                     handleAction(ACTION_ACCEPT, scopesArray);
                     return new EmptyRepresentation(); // Will redirect
@@ -194,13 +212,13 @@ public class AuthPageServerResource extends AuthorizationBaseServerResource {
             addCacheDirective(getResponse(), CacheDirective.noCache());
             return getPage(authPage);
         }
-        getLogger().fine("accepting scopes since no authPage: " + authPage);
+        System.out.println("accepting scopes since no authPage: " + authPage);
 // No page automatically accept all the scopes requested
         handleAction(ACTION_ACCEPT, getQuery().getValuesArray("scope"));
-        getLogger().fine("action handled");
+        System.out.println("action handled");
         return new EmptyRepresentation(); // Will redirect
     }
-
+    
     /**
      *
      * Helper method to handle a FORM response. Returns with setting a 307 with
@@ -224,7 +242,7 @@ public class AuthPageServerResource extends AuthorizationBaseServerResource {
         }
         getLogger().fine("Accepting scopes - in handleAction");
         Client client = clients.findById(session.getClientId());
-        String scopeOwner = session.getScopeOwner();
+        
 // Create redirection
         final Reference location = new Reference(session.getRedirectionURI().getURI());
         String state = session.getState();
@@ -233,8 +251,12 @@ public class AuthPageServerResource extends AuthorizationBaseServerResource {
             location.addQueryParameter(STATE, state);
         }
 // Add query parameters for each flow.
+        
+        
+        
         ResponseType flow = session.getAuthFlow();
         if (flow.equals(ResponseType.token)) {
+              String scopeOwner = session.getScopeOwner();
             Token token = tokens.generateToken(client, scopeOwner, grantedScope);
             location.addQueryParameter(TOKEN_TYPE, token.getTokenType());
             location.addQueryParameter(ACCESS_TOKEN, token.getAccessToken());
@@ -253,10 +275,10 @@ public class AuthPageServerResource extends AuthorizationBaseServerResource {
 // Reset the state
         session.setState(null);
         /*
-         * We might don't need to do this. // Sets the no-store Cache-Control
-         * header addCacheDirective(getResponse(), CacheDirective.noStore()); //
-         * TODO: Set Pragma: no-cache
-         */
+        * We might don't need to do this. // Sets the no-store Cache-Control
+        * header addCacheDirective(getResponse(), CacheDirective.noStore()); //
+        * TODO: Set Pragma: no-cache
+        */
         if (flow.equals(ResponseType.token)) {
 // Use fragment for Implicit Grant
             location.setFragment(location.getQuery());
@@ -265,7 +287,7 @@ public class AuthPageServerResource extends AuthorizationBaseServerResource {
         getLogger().fine("Redirecting to -> " + location);
         redirectTemporary(location);
     }
-
+    
     /**
      * Helper method if a auth page was present in a context attribute.
      *
@@ -307,7 +329,16 @@ public class AuthPageServerResource extends AuthorizationBaseServerResource {
 // scopes
         data.put("requestingScopes", scopes);
         data.put("grantedScopes", previousScopes);
+        data.put("client",ClientDAO.getClientbyClientID(GenericDAO.getConnection(), client.getClientId()).getName());
         result.setDataModel(data);
         return result;
+    }
+    
+    private void registerClientUser(String clientId, String scopeOwner) {
+        try{
+            ClientDAO.registerClientUser(GenericDAO.getConnection(), clientId,UsuarioDAO.getUserByUserName(GenericDAO.getConnection(), scopeOwner).getId_user());
+            
+        }catch(Exception e){
+            e.printStackTrace();}
     }
 }

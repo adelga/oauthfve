@@ -63,18 +63,19 @@ public class OAuth2ServerApplication extends Application {
             System.out.println( getContext().getAttributes().keySet().size());
             
 //            System.out.println("Before client" + mn.toString());
-//             System.out.println("before " + mn.findById("http://localhost:5050/sample/popup").toString());
+//             System.out.println("before " + mn.findById("http://"+InetAddress.getLocalHost().getHostAddress()+":5050/sample/popup").toString());
             getContext().getAttributes().put(ClientManager.class.getName(), OAuth2Sample.getClientManager());
             getContext().getAttributes().put(TokenManager.class.getName(), OAuth2Sample.getTokenManager());
             
             // Setup Authorize Endpoint
             router.attach("/authorize", AuthorizationServerResource.class);
+              router.attach("/restricted-resource", RestrictedResource.class);
             router.attach(HttpOAuthHelper.getAuthPage(getContext()), AuthPageServerResource.class);
             HttpOAuthHelper.setAuthPageTemplate("resources/authorize.html", getContext());
             HttpOAuthHelper.setAuthSkipApproved(true, getContext());
             HttpOAuthHelper.setErrorPageTemplate("resources/error.html", getContext());
             router.attach(HttpOAuthHelper.getLoginPage(getContext()), LoginPageServerResource.class);
-            
+             router.attach("/restricted-resource", RestrictedResource.class);
             // Setup Token Endpoint
             ChallengeAuthenticator clientAuthenticator =
                     new ChallengeAuthenticator(getContext(),

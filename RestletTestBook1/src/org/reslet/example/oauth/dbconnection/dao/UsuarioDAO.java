@@ -7,13 +7,9 @@
 package org.reslet.example.oauth.dbconnection.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 import org.reslet.example.oauth.dbconnection.dto.UsuarioDTO;
 
 /**
@@ -65,8 +61,8 @@ public class UsuarioDAO {
     return false;}
     }
 
-   //  public static Map getUserByUser(java.sql.Connection connection,java.lang.String tipo, java.lang.String username){
-     public static UsuarioDTO getUserByUser(java.sql.Connection connection, java.lang.String username){
+   //  public static Map getUserByUserName(java.sql.Connection connection,java.lang.String tipo, java.lang.String username){
+     public static UsuarioDTO getUserByUserName(java.sql.Connection connection, java.lang.String username){
 
     ResultSet resultadoConsulta=null;
     String respuesta="";
@@ -95,6 +91,7 @@ public class UsuarioDAO {
           //   printResponse(respuesta);
             // map.put("username", resultadoConsulta.getString("username"));
             // map.put("password", resultadoConsulta.getString("password"));
+             dto.setId_user(resultadoConsulta.getInt("idUsuario"));
              dto.setId(resultadoConsulta.getString("username"));
              dto.setPassword(resultadoConsulta.getString("password"));
 

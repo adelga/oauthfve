@@ -21,7 +21,8 @@ import java.net.InetAddress;
 
 public class PopupResource extends ServerResource {
 
-  public static final String REDIRECT_URL = "http://localhost:5050/sample/popup";
+  public static String REDIRECT_URL = "";
+    private String IP_RS_mFacilYTa="172.26.0.120";
 
   
   @Get("text/html")
@@ -30,7 +31,8 @@ public class PopupResource extends ServerResource {
     String code = getQueryValue("code");
     String content = null;
     try {
-      ClientResource cr = new ClientResource("http://localhost:5052/oauth/token");
+        REDIRECT_URL = "http://"+InetAddress.getLocalHost().getHostAddress()+":5050/sample/popup";
+      ClientResource cr = new ClientResource("http://"+InetAddress.getLocalHost().getHostAddress()+":5052/oauth/token");
 
       cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC, ExternalApplication.clientID,
           ExternalApplication.clientSecret);
@@ -64,14 +66,38 @@ public class PopupResource extends ServerResource {
       JSONObject json = new JSONObject(content);
       CookieSetting cookieSetting =  new CookieSetting("token_type", json.getString("token_type"));
       cookieSetting.setPath("/");
-      cs.add(0, cookieSetting);
-      cookieSetting =  new CookieSetting("access_token", json.getString("access_token"));
-      cookieSetting.setPath("/");
-      cs.add(1, cookieSetting);
+
+       cs.add(0, cookieSetting);
+       cookieSetting =  new CookieSetting("access_token", json.getString("access_token"));
+       cookieSetting.setPath("/");
+       cookieSetting.setDomain(IP_RS_mFacilYTa);
+              cookieSetting.setSecure(false);
+cookieSetting.setAccessRestricted(false);
+       
+       cs.add(1, cookieSetting);
        cookieSetting =  new CookieSetting("refresh_token", json.getString("refresh_token"));
+       cookieSetting.setPath("/");
+       cookieSetting.setDomain(IP_RS_mFacilYTa);
+       cookieSetting.setAccessRestricted(false);
+
+       
+       cs.add(2, cookieSetting);
+       
+        cookieSetting =  new CookieSetting("token_type", json.getString("token_type"));
       cookieSetting.setPath("/");
-      cs.add(2, cookieSetting);
-      setStatus(Status.SUCCESS_OK);
+       cookieSetting.setSecure(false);
+       cs.add(3, cookieSetting);
+       cookieSetting =  new CookieSetting("access_token", json.getString("access_token"));
+       cookieSetting.setPath("/");
+       cookieSetting.setSecure(false);
+       
+       cs.add(4, cookieSetting);
+       cookieSetting =  new CookieSetting("refresh_token", json.getString("refresh_token"));
+       cookieSetting.setPath("/");
+       cookieSetting.setSecure(false);
+       
+       cs.add(5, cookieSetting);
+       setStatus(Status.SUCCESS_OK);
     }
     catch (JSONException e) {
       // TODO Auto-generated catch block

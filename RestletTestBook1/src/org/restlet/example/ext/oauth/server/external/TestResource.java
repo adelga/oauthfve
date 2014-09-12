@@ -13,8 +13,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.restlet.data.Cookie;
+import org.restlet.util.Series;
 
-public class IndexResource extends ServerResource {
+public class TestResource extends ServerResource {
     
     public static  String REDIRECT_URL = "";
     
@@ -23,25 +25,26 @@ public class IndexResource extends ServerResource {
         try {
             
             REDIRECT_URL="http://"+InetAddress.getLocalHost().getHostAddress()+":5050/sample/popup";
-            
+            Series<Cookie> cs = getRequest().getCookies();
+             System.out.println("cs size "+cs.size());
+            for(int i=0; i<cs.size();i++){
+                System.out.println("cs "+cs.get(i));
+                
+                    }
             Configuration config = new Configuration();
             config.setTemplateLoader(new ContextTemplateLoader(getContext(), "clap://system/resources/external/"));
             
             Map<String, String> map = new HashMap<String, String>();
-            String url =
-                    String
-                            .format(
-                                    "http://"+InetAddress.getLocalHost().getHostAddress()+":5050/oauth/authorize?client_id=%s&response_type=%s&scope=%s&redirect_uri=%s",
-                                    ExternalApplication.clientID, "code", "default", REDIRECT_URL);
+       
             TemplateRepresentation rep =
                     new TemplateRepresentation("index.html", config, MediaType.TEXT_HTML);
             
-            map.put("url", url);
+            map.put("url", "kkkkk");
             map.put("authenticated", "no");
             rep.setDataModel((Object) map);
             return rep;
         } catch (UnknownHostException ex) {
-            Logger.getLogger(IndexResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TestResource.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
         

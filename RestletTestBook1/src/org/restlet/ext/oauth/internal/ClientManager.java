@@ -46,7 +46,7 @@ import org.restlet.ext.oauth.internal.Client.ClientType;
  * public synchronized Restlet createInboundRoot(){
  *   ClientManager clientStore = ClientStoreFactory.getInstance();
  *   clientStore.createClient(&quot;1234567890&quot;,&quot;1234567890&quot;,
- *    &quot;http://localhost:8080&quot;);
+ *    &quot;http://"+InetAddress.getLocalHost().getHostAddress()+":8080&quot;);
  *  
  *   attribs.put(ClientManager.class.getCanonicalName(), clientStore);
  * }

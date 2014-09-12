@@ -68,7 +68,7 @@ public class UsuarioManager {
         System.out.println("Llega conexion");
         try {
          //   Map<String, String> map = bbdd.consultaBBDD(connection, GET_USER, id);
-            UsuarioDTO dto = UsuarioDAO.getUserByUser(connection, id);
+            UsuarioDTO dto = UsuarioDAO.getUserByUserName(connection, id);
             System.out.println("findUser con id=" + id);
 
             if (!dto.isEmpty()) {

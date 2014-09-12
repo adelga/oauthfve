@@ -20,6 +20,7 @@ public class GenericDAO {
     private static String portNumber="3306";
     private static String dbName="admin";
     private static String usersTab = "usuarios";
+    private static final String PASS="";
 
     private static String rstable= "resourcetable";
 
@@ -29,7 +30,7 @@ public class GenericDAO {
         Connection conn = null;
         Properties connectionProps = new Properties();
         connectionProps.put("user", "root");
-        connectionProps.put("password","fve");
+        connectionProps.put("password",PASS);
            try {
                 Class.forName("com.mysql.jdbc.Driver");
             } catch (Exception e) {

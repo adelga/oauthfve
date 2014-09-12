@@ -32,11 +32,13 @@
  */
 package org.restlet.example.ext.oauth.server;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import org.restlet.Component;
-import org.restlet.data.Protocol;
 import org.restlet.example.ext.oauth.server.external.ExternalApplication;
 import org.restlet.example.ext.oauth.server.oauth.OAuth2ServerApplication;
 import org.reslet.example.oauth.dbconnection.model.UsuarioManager;
+import org.restlet.data.Protocol;
 import org.restlet.ext.oauth.internal.Client;
 import org.restlet.ext.oauth.internal.Client.ClientType;
 import org.restlet.ext.oauth.internal.ClientManager;
@@ -67,13 +69,25 @@ public class OAuth2Sample {
   }
 
   public static void main(String[] args) throws Exception {
+      
+      InetAddress ip;
+	  try {
+ 
+		 InetAddress.getLocalHost().getHostAddress();
+		
+ 
+	  } catch (UnknownHostException e) {
+ 
+		e.printStackTrace();
+ 
+	  }
     userManager = new UsuarioManager();
 
   //  userManager.addUser("Alberto").setPassword("123456".toCharArray());
    // userManager.addUser("bob").setPassword("123456".toCharArray());
 
     clientManager = new MemoryClientManager();
-    Client client =clientManager.createClient("b8d1cfda-0a13-4072-ab8f-ae3494b2e028", "4RI419iBLqXTEiItKgZUcwm3F/Q=".toCharArray(), ClientType.PUBLIC, new String[] { "http://localhost:5050/sample/popup" }, null);
+    Client client =clientManager.createClient("b8d1cfda-0a13-4072-ab8f-ae3494b2e028", "4RI419iBLqXTEiItKgZUcwm3F/Q=".toCharArray(), ClientType.PUBLIC, new String[] { "http://"+InetAddress.getLocalHost().getHostAddress()+":5050/sample/popup", "http://172.26.0.121:8080/fachada" }, null);
  
 
 
