@@ -17,11 +17,12 @@ import org.restlet.resource.ServerResource;
 import org.restlet.util.Series;
 import freemarker.template.Configuration;
 import java.net.InetAddress;
+import org.restlet.example.ext.oauth.util.Network;
 
 
 public class PopupResource extends ServerResource {
 
-  public static final String REDIRECT_URL = "http://localhost:5050/sample/popup";
+  public static final String REDIRECT_URL = "http://"+Network.getLocalIP()+":5050/sample/popup";
 
   
   @Get("text/html")
@@ -30,7 +31,7 @@ public class PopupResource extends ServerResource {
     String code = getQueryValue("code");
     String content = null;
     try {
-      ClientResource cr = new ClientResource("http://localhost:5052/oauth/token");
+      ClientResource cr = new ClientResource("http://"+Network.getLocalIP()+":5052/oauth/token");
 
       cr.setChallengeResponse(ChallengeScheme.HTTP_BASIC, ExternalApplication.clientID,
           ExternalApplication.clientSecret);

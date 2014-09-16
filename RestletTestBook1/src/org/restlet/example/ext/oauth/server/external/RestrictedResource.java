@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import org.reslet.example.oauth.dbconnection.dao.GenericDAO;
 import org.reslet.example.oauth.dbconnection.dao.UsuarioDAO;
 import org.restlet.data.Form;
+import org.restlet.example.ext.oauth.util.Network;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.EmptyRepresentation;
 import org.restlet.representation.Representation;
@@ -25,7 +26,7 @@ public class RestrictedResource extends ServerResource {
   @Get
   public String getRep() throws ResourceException {
       
-      ClientResource cr = new ClientResource("http://localhost:5052/oauth/token_auth");
+      ClientResource cr = new ClientResource("http://"+Network.getLocalIP()+":5052/oauth/token_auth");
       System.out.println("Get Restricted");
       Form form = new Form();
       form.add("access_token", getQueryValue("access_token"));

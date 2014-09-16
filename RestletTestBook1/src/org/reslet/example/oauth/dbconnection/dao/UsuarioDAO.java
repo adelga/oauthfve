@@ -66,7 +66,7 @@ public class UsuarioDAO {
     }
 
    //  public static Map getUserByUser(java.sql.Connection connection,java.lang.String tipo, java.lang.String username){
-     public static UsuarioDTO getUserByUser(java.sql.Connection connection, java.lang.String username){
+     public static UsuarioDTO getUserByUserName(java.sql.Connection connection, java.lang.String username){
 
     ResultSet resultadoConsulta=null;
     String respuesta="";

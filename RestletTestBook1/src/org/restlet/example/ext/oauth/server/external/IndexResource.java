@@ -9,10 +9,11 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 import freemarker.template.Configuration;
+import org.restlet.example.ext.oauth.util.Network;
 
 public class IndexResource extends ServerResource {
 
-  public static final String REDIRECT_URL = "http://localhost:5050/sample/popup";
+  public static final String REDIRECT_URL = "http://"+Network.getLocalIP()+":5050/sample/popup";
 
   @Get("text/html")
   public Representation get() {
@@ -24,8 +25,9 @@ public class IndexResource extends ServerResource {
     String url =
         String
             .format(
-                "http://localhost:5050/oauth/authorize?client_id=%s&response_type=%s&scope=%s&redirect_uri=%s",
+                "http://"+Network.getLocalIP()+":5050/oauth/authorize?client_id=%s&response_type=%s&scope=%s&redirect_uri=%s",
                 ExternalApplication.clientID, "code", "default", REDIRECT_URL);
+      System.out.println("url auth:"+url);
     TemplateRepresentation rep =
         new TemplateRepresentation("index.html", config, MediaType.TEXT_HTML);
 
