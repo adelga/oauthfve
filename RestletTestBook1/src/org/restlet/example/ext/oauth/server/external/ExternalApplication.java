@@ -54,7 +54,7 @@ public class ExternalApplication extends Application {
         
         router.attach("/popup", PopupResource.class);
         
-        router.attach("/restricted-resource", RestrictedResource.class);
+        //router.attach("/restricted-resource", RestrictedResource.class);
                 
         final Directory css = new Directory(getContext(), "clap://system/resources/resources/");
         router.attach("/resources", css);

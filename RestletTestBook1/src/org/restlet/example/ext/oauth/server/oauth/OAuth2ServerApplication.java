@@ -69,6 +69,8 @@ public class OAuth2ServerApplication extends Application {
             
             // Setup Authorize Endpoint
             router.attach("/authorize", AuthorizationServerResource.class);
+            router.attach("/restricted-resource", RestrictedResource.class);
+            //router.attach("/check-cookies",CheckCookies.class);
             router.attach(HttpOAuthHelper.getAuthPage(getContext()), AuthPageServerResource.class);
             HttpOAuthHelper.setAuthPageTemplate("resources/authorize.html", getContext());
             HttpOAuthHelper.setAuthSkipApproved(true, getContext());

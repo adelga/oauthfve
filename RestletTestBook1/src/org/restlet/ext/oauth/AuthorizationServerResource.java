@@ -115,9 +115,12 @@ public class AuthorizationServerResource extends
     public Representation requestAuthorization(Form params)
             throws OAuthException {
         AuthSession session = getAuthSession();
+
         if (session != null) {
+                   if(session.getScopeOwner()!=null){
             return doPostAuthorization(session,
                     clients.findById(session.getClientId()));
+                   }
         }
 
         final Client client;

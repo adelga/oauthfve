@@ -10,7 +10,16 @@ package org.reslet.example.oauth.dbconnection.dto;
  * @author fve
  */
 public class UsuarioDTO {
+    
+    private int id_user;
 
+    public int getId_user() {
+        return id_user;
+    }
+
+    public void setId_user(int id_user) {
+        this.id_user = id_user;
+    }
     private String id;
     private String password;
     private String status;

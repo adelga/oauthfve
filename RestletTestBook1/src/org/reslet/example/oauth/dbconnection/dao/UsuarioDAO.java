@@ -95,6 +95,7 @@ public class UsuarioDAO {
           //   printResponse(respuesta);
             // map.put("username", resultadoConsulta.getString("username"));
             // map.put("password", resultadoConsulta.getString("password"));
+             dto.setId_user(resultadoConsulta.getInt("idUsuario"));
              dto.setId(resultadoConsulta.getString("username"));
              dto.setPassword(resultadoConsulta.getString("password"));
 
