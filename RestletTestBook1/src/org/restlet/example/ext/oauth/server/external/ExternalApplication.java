@@ -34,6 +34,7 @@ package org.restlet.example.ext.oauth.server.external;
 
 import org.restlet.Application;
 import org.restlet.Restlet;
+import org.restlet.example.ext.oauth.server.services.SessionLogout;
 import org.restlet.resource.Directory;
 import org.restlet.routing.Router;
 
@@ -50,8 +51,8 @@ public class ExternalApplication extends Application {
     public synchronized Restlet createInboundRoot() {
         Router router = new Router(getContext());
         router.attach("/", IndexResource.class);
-        router.attach("/test",HelloServerResource.class);
-        
+       // router.attach("/test",HelloServerResource.class);
+       // router.attach("/logout", SessionLogout.class);
         router.attach("/popup", PopupResource.class);
         
         //router.attach("/restricted-resource", RestrictedResource.class);

@@ -36,6 +36,8 @@ import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.example.ext.oauth.server.OAuth2Sample;
+import org.restlet.example.ext.oauth.server.oauth.LogoutAction;
+import org.restlet.example.ext.oauth.server.services.SessionLogout;
 import org.restlet.ext.oauth.AccessTokenServerResource;
 import org.restlet.ext.oauth.AuthPageServerResource;
 import org.restlet.ext.oauth.AuthorizationServerResource;
@@ -70,13 +72,14 @@ public class OAuth2ServerApplication extends Application {
             // Setup Authorize Endpoint
             router.attach("/authorize", AuthorizationServerResource.class);
             router.attach("/restricted-resource", RestrictedResource.class);
+
             //router.attach("/check-cookies",CheckCookies.class);
             router.attach(HttpOAuthHelper.getAuthPage(getContext()), AuthPageServerResource.class);
             HttpOAuthHelper.setAuthPageTemplate("resources/authorize.html", getContext());
             HttpOAuthHelper.setAuthSkipApproved(true, getContext());
             HttpOAuthHelper.setErrorPageTemplate("resources/error.html", getContext());
             router.attach(HttpOAuthHelper.getLoginPage(getContext()), LoginPageServerResource.class);
-            
+            router.attach("/logout",LogoutAction.class);
             // Setup Token Endpoint
             ChallengeAuthenticator clientAuthenticator =
                     new ChallengeAuthenticator(getContext(),

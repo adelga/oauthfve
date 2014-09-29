@@ -42,6 +42,7 @@ import org.reslet.example.oauth.dbconnection.dao.UsuarioDAO;
 import org.restlet.data.CacheDirective;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
+import org.restlet.example.ext.oauth.server.oauth.LogoutAction;
 import org.restlet.ext.freemarker.ContextTemplateLoader;
 import org.restlet.ext.freemarker.TemplateRepresentation;
 import org.restlet.ext.oauth.internal.AuthSession;
@@ -237,6 +238,8 @@ public class AuthPageServerResource extends AuthorizationBaseServerResource {
         session.setGrantedScope(grantedScope);
         if (action.equals(ACTION_REJECT)) {
             getLogger().fine("Rejected.");
+            LogoutAction logout= new LogoutAction();
+            logout.closeSession();
             throw new OAuthException(OAuthError.access_denied, "Rejected.",
                     null);
         }
