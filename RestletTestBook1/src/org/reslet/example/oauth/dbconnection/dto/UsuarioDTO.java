@@ -23,6 +23,7 @@ public class UsuarioDTO {
     private String id;
     private String password;
     private String status;
+    
 
     public UsuarioDTO(){
     this.id = "";

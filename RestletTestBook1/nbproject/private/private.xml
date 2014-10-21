@@ -4,10 +4,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Fundación%20Vodafone/RestletTestBook1/src/org/restlet/example/ext/oauth/server/external/RestrictedResource.java</file>
-            <file>file:/D:/Fundación%20Vodafone/RestletTestBook1/src/org/restlet/example/ext/oauth/server/external/ExternalApplication.java</file>
-            <file>file:/D:/Fundación%20Vodafone/RestletTestBook1/src/org/reslet/example/oauth/dbconnection/UsuariosConnection.java</file>
-            <file>file:/D:/Fundación%20Vodafone/RestletTestBook1/src/org/restlet/example/ext/oauth/server/OAuth2Sample.java</file>
+            <file>file:/C:/Users/Usuario/oauthfve/RestletTestBook1/src/org/restlet/example/ext/oauth/server/oauth/LoginPageServerResource.java</file>
+            <file>file:/C:/Users/Usuario/oauthfve/RestletTestBook1/src/org/restlet/ext/oauth/internal/Client.java</file>
+            <file>file:/C:/Users/Usuario/oauthfve/RestletTestBook1/src/org/restlet/ext/oauth/AuthorizationServerResource.java</file>
+            <file>file:/C:/Users/Usuario/oauthfve/RestletTestBook1/src/org/reslet/example/oauth/dbconnection/dao/ClientDAO.java</file>
+            <file>file:/C:/Users/Usuario/oauthfve/RestletTestBook1/src/org/restlet/example/ext/oauth/server/oauth/OAuth2ServerApplication.java</file>
+            <file>file:/C:/Users/Usuario/oauthfve/RestletTestBook1/src/org/restlet/ext/oauth/AccessTokenServerResource.java</file>
+            <file>file:/C:/Users/Usuario/oauthfve/RestletTestBook1/src/org/restlet/ext/oauth/internal/TokenManager.java</file>
+            <file>file:/C:/Users/Usuario/oauthfve/RestletTestBook1/src/org/restlet/ext/oauth/AuthPageServerResource.java</file>
+            <file>file:/C:/Users/Usuario/oauthfve/RestletTestBook1/src/org/restlet/ext/oauth/internal/AbstractTokenManager.java</file>
+            <file>file:/C:/Users/Usuario/oauthfve/RestletTestBook1/src/resources/authorize.html</file>
+            <file>file:/C:/Users/Usuario/oauthfve/RestletTestBook1/src/org/restlet/ext/oauth/OAuthResourceDefs.java</file>
+            <file>file:/C:/Users/Usuario/oauthfve/RestletTestBook1/src/org/restlet/example/ext/oauth/server/OAuth2Sample.java</file>
+            <file>file:/C:/Users/Usuario/oauthfve/RestletTestBook1/src/org/restlet/ext/oauth/internal/memory/MemoryTokenManager.java</file>
+            <file>file:/C:/Users/Usuario/oauthfve/RestletTestBook1/src/org/restlet/ext/oauth/AuthorizationBaseServerResource.java</file>
         </group>
     </open-files>
 </project-private>

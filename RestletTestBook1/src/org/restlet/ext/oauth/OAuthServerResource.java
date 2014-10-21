@@ -95,20 +95,21 @@ public abstract class OAuthServerResource extends ServerResource implements
      */
     protected Client getClient(Form params) throws OAuthException {
         // check clientId:
+        
         String clientId = params.getFirstValue(CLIENT_ID);
+        System.out.println("client " + clientId);
         if (clientId == null || clientId.isEmpty()) {
             getLogger().warning("Could not find client ID");
             throw new OAuthException(OAuthError.invalid_request,
                     "No client_id parameter found.", null);
         }
         Client client = clients.findById(clientId);
-        getLogger().fine("Client = " + client);
+        System.out.println("Client = " + client.getClientId());
         if (client == null) {
             getLogger().warning("Need to register the client : " + clientId);
             throw new OAuthException(OAuthError.invalid_request,
                     "Need to register the client : " + clientId, null);
         }
-
         return client;
     }
 

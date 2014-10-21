@@ -14,6 +14,7 @@ public class ClientDTO {
     private String client_id;
     private String client_secret;
     private String name;
+    private final String password = "pass";
 
     public ClientDTO(String client_id, String client_secret, String name) {
         this.client_id = client_id;

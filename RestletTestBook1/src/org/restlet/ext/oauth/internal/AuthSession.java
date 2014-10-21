@@ -56,7 +56,7 @@ import org.restlet.ext.oauth.ResponseType;
  */
 public class AuthSession {
 
-    public static final int DEFAULT_TIMEOUT_SEC = 600;
+    public static final int DEFAULT_TIMEOUT_SEC = 3600;
 
     private static final String ID = "id";
 

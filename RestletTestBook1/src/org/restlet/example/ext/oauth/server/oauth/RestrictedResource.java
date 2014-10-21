@@ -52,6 +52,7 @@ public class RestrictedResource extends ServerResource {
          // String username = "mycallback("+json.getString("username")+")";
            String username = json.getString("username");
           String rsName=getQueryValue("nameRS");
+          
           String  rsUser;
           if(rsName!=null){
                         //TODO Checkear en la tabla User-RS que para el id_user del userName dado y para el id_RS del NameRS dado existe una entrada y devolver el RSUserName

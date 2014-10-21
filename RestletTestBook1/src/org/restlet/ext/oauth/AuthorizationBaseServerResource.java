@@ -107,7 +107,7 @@ public class AuthorizationBaseServerResource extends OAuthServerResource {
         // cs.setAccessRestricted(true);
         // cs.setSecure(true);
         getCookieSettings().add(cs);
-        getLogger().fine("Setting cookie in SetupSession - " + session.getId());
+        System.out.println("Setting cookie in SetupSession - " + session.getId());
 
         getContext().getAttributes().put(session.getId(), session);
 
@@ -134,10 +134,13 @@ public class AuthorizationBaseServerResource extends OAuthServerResource {
         try {
             session.updateActivity();
         } catch (AuthSessionTimeoutException ex) {
-            // Remove timeout session
+            // Remove timeout session4
+            //TODO, ir a login no al redirec uri
+            System.err.println("Session timeout redirect: " + getQueryValue(REDIR_URI));
+           
             getContext().getAttributes().remove(sessionId);
-            throw new OAuthException(OAuthError.server_error,
-                    "Session timeout", null);
+          // redirectTemporary("/oauth/login");
+            return null;
         }
 
         return session;

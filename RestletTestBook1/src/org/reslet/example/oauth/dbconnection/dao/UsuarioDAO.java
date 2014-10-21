@@ -15,12 +15,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import org.reslet.example.oauth.dbconnection.dto.UsuarioDTO;
+import org.restlet.example.ext.oauth.util.SimpleCryptoUtil;
 
 /**
  *
  * @author Usuario
  */
 public class UsuarioDAO {
+    private static String password="seed";
     
      
      
@@ -91,13 +93,13 @@ public class UsuarioDAO {
                     resultadoConsulta = st.executeQuery(consulta);
                      while(resultadoConsulta.next()){
                          
-             respuesta+="user="+resultadoConsulta.getString("username")+" password="+resultadoConsulta.getString("password");
+             respuesta+="user="+resultadoConsulta.getString("username")+" password="+SimpleCryptoUtil.decrypt(password,resultadoConsulta.getString("password"));
           //   printResponse(respuesta);
             // map.put("username", resultadoConsulta.getString("username"));
             // map.put("password", resultadoConsulta.getString("password"));
              dto.setId_user(resultadoConsulta.getInt("idUsuario"));
              dto.setId(resultadoConsulta.getString("username"));
-             dto.setPassword(resultadoConsulta.getString("password"));
+             dto.setPassword(SimpleCryptoUtil.decrypt(password,resultadoConsulta.getString("password")));
 
 
          }
@@ -124,4 +126,21 @@ public class UsuarioDAO {
         System.out.println(response);
     }
 
+    public static boolean insertUsuario(java.sql.Connection connection, UsuarioDTO user){
+        try{
+                String consulta = "";
+
+            Statement st=null;
+            st = connection.createStatement();
+             System.out.println( user.getPassword() + " pass    " + SimpleCryptoUtil.encrypt(password, user.getPassword()));
+            consulta = "INSERT INTO `usuarios` (`username`, `password`) VALUES ('"+user.getId()+"', '"+SimpleCryptoUtil.encrypt(password, user.getPassword())+"')";
+            System.out.println("result to instert " + consulta);
+boolean b = st.execute(consulta);
+          System.out.println("result to instert " + b);
+        }catch(Exception e){
+            
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

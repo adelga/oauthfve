@@ -32,11 +32,17 @@
  */
 package org.restlet.example.ext.oauth.server;
 
+import java.util.ArrayList;
+import org.reslet.example.oauth.dbconnection.dao.ClientDAO;
+import org.reslet.example.oauth.dbconnection.dao.GenericDAO;
+import org.reslet.example.oauth.dbconnection.dao.UsuarioDAO;
+import org.reslet.example.oauth.dbconnection.dto.ClientDTO;
+import org.reslet.example.oauth.dbconnection.dto.UsuarioDTO;
+import org.reslet.example.oauth.dbconnection.model.UsuarioManager;
 import org.restlet.Component;
 import org.restlet.data.Protocol;
 import org.restlet.example.ext.oauth.server.external.ExternalApplication;
 import org.restlet.example.ext.oauth.server.oauth.OAuth2ServerApplication;
-import org.reslet.example.oauth.dbconnection.model.UsuarioManager;
 import org.restlet.example.ext.oauth.util.Network;
 import org.restlet.ext.oauth.internal.Client;
 import org.restlet.ext.oauth.internal.Client.ClientType;
@@ -70,19 +76,29 @@ public class OAuth2Sample {
   public static void main(String[] args) throws Exception {
     userManager = new UsuarioManager();
 
-  //  userManager.addUser("Alberto").setPassword("123456".toCharArray());
-   // userManager.addUser("bob").setPassword("123456".toCharArray());
-
     clientManager = new MemoryClientManager();
-    Client client =clientManager.createClient("b8d1cfda-0a13-4072-ab8f-ae3494b2e028", "4RI419iBLqXTEiItKgZUcwm3F/Q=".toCharArray(), ClientType.PUBLIC, new String[] { "http://"+Network.getLocalIP()+":5050/sample/popup","http://"+Network.getLocalIP()+":8080/fachada" }, null);
- 
+//    UsuarioDTO user = new UsuarioDTO("alberto");
+//    user.setPassword("123456");
+//     UsuarioDAO.insertUsuario(GenericDAO.getConnection(),user);
+      String[] uris= ClientDAO.getRedirectsURIsByIdClient(GenericDAO.getConnection(), "b8d1cfda-0a13-4072-ab8f-ae3494b2e028");
+     
+     
+    //Create the client for example web app
+      ClientDTO clientdto= ClientDAO.getClientbyName(GenericDAO.getConnection(),"Client SAMPLE");
+      
+      ArrayList<ClientDTO> clientes= ClientDAO.getAllClients(GenericDAO.getConnection());
+      Client client = null;
+      for(int i=0; i<clientes.size(); i++){
+          clientdto=clientes.get(i);
+     client =clientManager.createClient(clientdto.getClient_id(), clientdto.getClient_secret().toCharArray(), ClientType.PUBLIC,ClientDAO.getRedirectsURIsByIdClient(GenericDAO.getConnection(), clientdto.getClient_id()) , null);
+      }
 
 
 
     
 
-        System.out.println("SampleClient: client_id=" + client.getClientId() + ", client_secret="
-        + String.copyValueOf(client.getClientSecret()));
+//        System.out.println("SampleClient: client_id=" + client.getClientId() + ", client_secret="
+//        + String.copyValueOf(client.getClientSecret()));
 
     ExternalApplication.clientID = client.getClientId();
     ExternalApplication.clientSecret = String.valueOf(client.getClientSecret());
@@ -96,6 +112,8 @@ public class OAuth2Sample {
     component.getClients().add(Protocol.RIAP);
     component.getClients().add(Protocol.CLAP);
     component.getServers().add(Protocol.HTTP, 5050);
+    component.getServers().add(Protocol.HTTPS, 4040);
+
     component.getServers().add(Protocol.HTTP, 5052);
 
     component.getDefaultHost().attach("/sample", new ExternalApplication());

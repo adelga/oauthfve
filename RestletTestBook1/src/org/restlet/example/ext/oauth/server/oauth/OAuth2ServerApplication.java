@@ -36,8 +36,6 @@ import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.example.ext.oauth.server.OAuth2Sample;
-import org.restlet.example.ext.oauth.server.oauth.LogoutAction;
-import org.restlet.example.ext.oauth.server.services.SessionLogout;
 import org.restlet.ext.oauth.AccessTokenServerResource;
 import org.restlet.ext.oauth.AuthPageServerResource;
 import org.restlet.ext.oauth.AuthorizationServerResource;
@@ -64,10 +62,12 @@ public class OAuth2ServerApplication extends Application {
             System.out.println("Client Manager to verify:"+OAuth2Sample.getClientManager().toString());
             System.out.println( getContext().getAttributes().keySet().size());
             
-//            System.out.println("Before client" + mn.toString());
-//             System.out.println("before " + mn.findById("http://localhost:5050/sample/popup").toString());
+
             getContext().getAttributes().put(ClientManager.class.getName(), OAuth2Sample.getClientManager());
             getContext().getAttributes().put(TokenManager.class.getName(), OAuth2Sample.getTokenManager());
+            
+             router.attach("/registerClient", RegisterClient.class);
+              router.attach("/registerUser", RegisterUser.class);
             
             // Setup Authorize Endpoint
             router.attach("/authorize", AuthorizationServerResource.class);

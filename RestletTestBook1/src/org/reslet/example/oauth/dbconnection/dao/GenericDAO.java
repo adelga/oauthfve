@@ -20,7 +20,7 @@ public class GenericDAO {
     private static String portNumber="3306";
     private static String dbName="admin";
     private static String usersTab = "usuarios";
-    private static final String PASS="fve";
+    private static final String PASS="";
 
     private static String rstable= "resourcetable";
 

@@ -33,6 +33,8 @@
 
 package org.restlet.ext.oauth;
 
+import org.reslet.example.oauth.dbconnection.dao.ClientDAO;
+import org.reslet.example.oauth.dbconnection.dao.GenericDAO;
 import org.restlet.ext.oauth.internal.Client;
 import org.restlet.data.Form;
 import org.restlet.data.Reference;
@@ -115,37 +117,47 @@ public class AuthorizationServerResource extends
     public Representation requestAuthorization(Form params)
             throws OAuthException {
         AuthSession session = getAuthSession();
-
+        System.out.println("Session : " + session);
+        
+        
         if (session != null) {
-                   if(session.getScopeOwner()!=null){
-            return doPostAuthorization(session,
-                    clients.findById(session.getClientId()));
-                   }
+            
+            if(session.getScopeOwner()!=null){
+                
+                return doPostAuthorization(session,
+                        clients.findById(session.getClientId()));
+            }
         }
-
+        
         final Client client;
         final RedirectionURI redirectURI;
         try {
             client = getClient(params);
             redirectURI = getRedirectionURI(params, client);
+            System.out.println("client : " + client);
         } catch (OAuthException ex) {
             /*
-             * MUST NOT automatically redirect the user-agent to the invalid
-             * redirection URI. (see 3.1.2.4. Invalid Endpoint)
-             */
+            * MUST NOT automatically redirect the user-agent to the invalid
+            * redirection URI. (see 3.1.2.4. Invalid Endpoint)
+            */
+            System.out.println("OauthException :  "+ex.getMessage());
             return getErrorPage(
                     HttpOAuthHelper.getErrorPageTemplate(getContext()), ex);
         } catch (Exception ex) {
             // All other exception should be caught as server_error.
+            System.err.println("Exception : " + ex.toString());
+            
+            System.out.println("Exception : " + ex.getMessage());
+            
             OAuthException oex = new OAuthException(OAuthError.server_error,
-                    ex.getMessage(), null);
+                    ex.getMessage()==null?"not idenfied":ex.getMessage(), null);
             return getErrorPage(
                     HttpOAuthHelper.getErrorPageTemplate(getContext()), oex);
         }
-
+        
         // Start Session
         session = setupAuthSession(redirectURI);
-
+        
         // Setup session attributes
         try {
             ResponseType[] responseTypes = getResponseType(params);
@@ -169,13 +181,13 @@ public class AuthorizationServerResource extends
             ungetAuthSession();
             throw ex;
         }
-
+        
         User scopeOwner = getRequest().getClientInfo().getUser();
         if (scopeOwner != null) {
             // If user information is present, use as scope owner.
             session.setScopeOwner(scopeOwner.getIdentifier());
         }
-
+        
         if (session.getScopeOwner() == null) {
             // Redirect to login page.
             Reference ref = new Reference("."
@@ -185,7 +197,7 @@ public class AuthorizationServerResource extends
             redirectTemporary(ref.toString());
             return new EmptyRepresentation();
         }
-
+        
         return doPostAuthorization(session, client);
     }
 
@@ -278,7 +290,9 @@ public class AuthorizationServerResource extends
     protected RedirectionURI getRedirectionURI(Form params, Client client)
             throws OAuthException {
         String redirectURI = params.getFirstValue(REDIR_URI);
-        String[] redirectURIs = client.getRedirectURIs();
+        System.out.println("RedirectUri "+redirectURI);
+        String[] redirectURIs = ClientDAO.getRedirectsURIsByIdClient(GenericDAO.getConnection(), client.getClientId());
+        System.out.println("RedirectUris " +redirectURIs[1]);
 
         /*
          * If multiple redirection URIs have been registered, if only part of
@@ -308,6 +322,8 @@ public class AuthorizationServerResource extends
          * URIs were registered. (See 3.1.2.3. Dynamic Configuration)
          */
         for (String uri : redirectURIs) {
+            System.out.println("uri: " + uri);
+            if(uri==null) break;
             if (redirectURI.startsWith(uri)) {
                 return new RedirectionURI(redirectURI, true);
             }
