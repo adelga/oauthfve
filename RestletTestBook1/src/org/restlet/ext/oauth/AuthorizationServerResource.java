@@ -37,7 +37,9 @@ import org.reslet.example.oauth.dbconnection.dao.ClientDAO;
 import org.reslet.example.oauth.dbconnection.dao.GenericDAO;
 import org.restlet.ext.oauth.internal.Client;
 import org.restlet.data.Form;
+import org.restlet.data.Protocol;
 import org.restlet.data.Reference;
+import org.restlet.example.ext.oauth.util.Network;
 import org.restlet.ext.oauth.internal.AuthSession;
 import org.restlet.ext.oauth.internal.RedirectionURI;
 import org.restlet.ext.oauth.internal.Scopes;
@@ -74,8 +76,7 @@ import org.restlet.security.User;
  * </pre>
  * 
  * 
- * @author Shotaro Uchida <fantom@xmaker.mx>
- * @author Martin Svensson
+ * 
  * 
  * @see <a href="http://tools.ietf.org/html/rfc6749#section-3.1">OAuth 2.0</a>
  */
@@ -189,11 +190,15 @@ public class AuthorizationServerResource extends
         }
         
         if (session.getScopeOwner() == null) {
-            // Redirect to login page.
-            Reference ref = new Reference("."
+           // Redirect to login page.
+            Reference ref = new Reference("https://"+Network.getLocalIP()+":5050/oauth"
                     + HttpOAuthHelper.getLoginPage(getContext()));
+            Reference originalref = getRequest().getOriginalRef();
+            originalref.setProtocol(Protocol.HTTPS);
             ref.addQueryParameter("continue", getRequest().getOriginalRef()
                     .toString(true, false)); // XXX: Don't need full query.
+            
+            System.out.println("LOGIN  " +  originalref);
             redirectTemporary(ref.toString());
             return new EmptyRepresentation();
         }
