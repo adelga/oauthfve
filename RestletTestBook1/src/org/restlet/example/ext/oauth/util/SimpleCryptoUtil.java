@@ -1,6 +1,8 @@
 
 /*
+
  * Copyright (c) 2014 , Fundacion Vodafone Espa�a
+
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -54,11 +56,18 @@ C�DIGO FUENTE Y BINARIO QUE TERCEROS HAGAN, DE SUS POSIBLES DESARROLLOS, MODIF
 NI TAMPOCO DE LOS POSIBLES DA�OS (DE CUALQUIER CATEGOR�A) QUE PUDIERAN GENERARSE A PARTIR DE DICHAS ACCIONES.
  */
 
+
 /**
  * @author Alberto Delgado
  */
 package org.restlet.example.ext.oauth.util;
 
+
+
+
+/**
+ * @author Alberto Delgado
+ */
 
 
 
